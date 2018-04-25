@@ -20,10 +20,11 @@ var xp = [
     {
         rating: '1/8',
         xp: '25'
-    },
-    {}
+    }
 ];
 
+// Possible options for CR. isNaN is failing me so just going to do an includes
+const CRs = ['1/8', '1/4', '1/2', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30'];
 // When trying to find the word challenge a couple common false positives come up.
 const exceptions = ['cha', 'class']; // Add said exceptions to here. All lowercase.
 function isException(string){
@@ -51,7 +52,7 @@ async.series([
                     asyncCB('FILE ERR: ' + fileErr);
                 }
                 files.forEach(file => {
-                    if(file.endsWith('.png')){
+                    if(file.toLowerCase().endsWith('.png')){ // TODO include other formats too because tesseract can handle them
                         totalImageFiles++;
                     }
                 });
@@ -73,8 +74,7 @@ async.series([
                                 let matches = []; // All matches below the threshold are put in here, and then we
                                 for(let idx = 0; idx < words.length; idx++){
                                     let fuzzy = fm.get(words[idx]);
-                                    // It is important to use Number.isNaN() instead of global isNaN() because this version picks up
-                                    if(fuzzy.value === 'Challenge' && words.length > idx+1 && fuzzy.distance > threshold && !Number.isNaN(words[idx + 1]) && !isException(words[idx])){ // If fuzzy matching picks up the word Challenge and there's a number after that, grab it as the CR
+                                    if(fuzzy.value === 'Challenge' && words.length > idx+1 && fuzzy.distance > threshold && CRs.includes(words[idx + 1]) && !isException(words[idx])){ // If fuzzy matching picks up the word Challenge and there's a number after that, grab it as the CR
                                         fuzzy.index = idx; // Add corresponding index to the fuzzy match results
                                         fuzzy.match = words[idx];
                                         fuzzy.cr = words[idx + 1];
