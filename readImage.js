@@ -123,13 +123,12 @@ module.exports = ({logging = false, threshold = 0.2, exceptions = defaultExcepti
         let monsters = [];
         let filesDone = 0;
         let totalImageFiles = 0;
-        log('Reading files from dir: ', dir);
         if(isSupported(file)){
             // Recognize text of any language in any format
             log('Reading file: ', file);
             tesseract.process(file, (tessErr, text) => {
                 if(tessErr) {
-                    asyncCB('TESS ERR: ' + tessErr);
+                    callback('Image Reader Error: ' + tessErr);
                 } else {
                     let cr = extractCR(text);
                     let type = extractType(text);
@@ -145,7 +144,9 @@ module.exports = ({logging = false, threshold = 0.2, exceptions = defaultExcepti
                     callback(ret);
                 }
             });
+        }else{
+            callback("Image Reader Error: File type not supported");
         }
-    }
+    };
 };
 
