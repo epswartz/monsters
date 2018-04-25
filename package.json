@@ -1,0 +1,18 @@
+{
+  "name": "monsters",
+  "version": "0.0.1",
+  "description": "A set of tools for creating stuff using the r/monsteraday subreddit.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "u/Exnur0",
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.6.0",
+    "command-line-args": "^5.0.2",
+    "fuzzy-matching": "^0.4.3",
+    "node-tesseract": "^0.2.7",
+    "rss-parser": "^3.1.2"
+  }
+}
